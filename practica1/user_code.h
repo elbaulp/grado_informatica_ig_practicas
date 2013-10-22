@@ -19,16 +19,12 @@ class Figura{
     vector<vector<GLfloat> > vertex;
     vector<vector<GLint> > caras;
 
-    unsigned int size_caras;
-    unsigned int size_vertex;
-
     vector<vector<GLfloat> > unitobi(vector<float> &v);
     vector<vector<GLint> > unitobi(vector<int> &c);
 
 public:
     
     Figura(vector<float> &vertice, vector<int> &caras);
-    Figura(int, int);
     Figura();
     
     void draw();

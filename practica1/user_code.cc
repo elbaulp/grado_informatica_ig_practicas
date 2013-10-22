@@ -16,31 +16,36 @@
 //***************************************************************************
 
 void draw(vector<float> &vertices, vector<int> &caras){
-
     Figura figura(vertices, caras);
     figura.draw();
-    /*
-    // Convertir vector de vertices a uno bidimensional de tamaño 3
-    int num_filas = vertices.size() / 3;
- //   GLfloat v[num_filas][3];
+}
+
+vector<vector<GLfloat> > Figura::unitobi(vector<GLfloat> &v){
+    int num_filas = v.size() / 3;
+    vector<vector<GLfloat> > vector_dimen(num_filas, vector<GLfloat>(3));
+
+    for (int i = 0; i < v.size(); ++i)
+        vector_dimen[i/3][i%3] = v.at(i);
+
+    return vector_dimen;
+}
+
+vector<vector<GLint> > Figura::unitobi(vector<GLint> &c){
+    int num_filas = c.size() / 3;
+    vector<vector<GLint> > vector_dimen(num_filas, vector<GLint>(3));
     
-//    for (int i = 0; i < vertices.size(); ++i)
-//        v[i/3][i%3] = vertices.at(i);
+    for (int i = 0; i < c.size(); ++i)
+        vector_dimen[i/3][i%3] = c.at(i);
 
-    int num_filas_caras = caras.size() / 3;
- //   GLint c[num_filas_caras][3];
+    return vector_dimen;
+}
 
-//    for (int i = 0; i < caras.size(); ++i)
-//        c[i/3][i%3] = caras.at(i);
-*/
-//////////////
-/*    vector<vector<GLfloat> > vec_vert(num_filas, vector<GLfloat>(3));
-    vector<vector<GLint> > vec_car(num_filas_caras, vector<GLint>(3));
+Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras){
+    this->vertex = this->unitobi(vertice);
+    this->caras =  this->unitobi(caras);
+}
 
-    for (int i = 0; i < vertices.size(); i++)
-        vec_vert[i/3][i%3] = vertices.at(i);
-    for (int i = 0; i < caras.size(); i++)
-        vec_car[i/3][i%3] = caras.at(i);
+void Figura::draw(){
 
     glColor3f(0,0,1);
     glPointSize(4);
@@ -49,43 +54,18 @@ void draw(vector<float> &vertices, vector<int> &caras){
     glPolygonMode(GL_BACK, GL_LINE);
    
     glBegin(GL_TRIANGLES);
-    
-    for (int i = 0; i < caras.size()/3; i++){
-        
+
+    for (int i = 0; i < this->caras.size(); i++){
+
         if (i%3==0) glColor3f(0,1,0);
         else if (i%3==1) glColor3f(0,0,1);
-//        else glColor3f(0,1,1);
 
-        glVertex3fv((GLfloat*) vec_vert[vec_car[i][0]].data());;
-        glVertex3fv((GLfloat*) vec_vert[vec_car[i][1]].data());
-        glVertex3fv((GLfloat*) vec_vert[vec_car[i][2]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][0]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][2]].data());
     }
     glEnd();
-
-*/
-/////////////
-
-/*
-    glColor3f(0,0,1);
-    glPointSize(4);
-   
-    glPolygonMode(GL_FRONT, GL_FILL);
-    glPolygonMode(GL_BACK, GL_LINE);
-   
-    glBegin(GL_TRIANGLES);
-    
-    for (int i = 0; i < caras.size()/3; i++){
-        
-        if (i%3==0) glColor3f(0,1,0);
-        else if (i%3==1) glColor3f(0,0,1);
-//        else glColor3f(0,1,1);
-
-        glVertex3fv((GLfloat*) &v[c[i][0]]);;
-        glVertex3fv((GLfloat*) &v[c[i][1]]);
-        glVertex3fv((GLfloat*) &v[c[i][2]]);
-    }
-    glEnd();
-*/
+ 
 }
 
 void draw_cube()
@@ -140,53 +120,5 @@ void draw_vertices(vector<float> &Vertices)
         glVertex3fv((GLfloat*) &v[i]);
 
     glEnd();
-}
-
-vector<vector<GLfloat> > Figura::unitobi(vector<GLfloat> &v){
-    int num_filas = v.size() / 3;
-    vector<vector<GLfloat> > vector_dimen(num_filas, vector<GLfloat>(3));
-
-    for (int i = 0; i < v.size(); ++i)
-        vector_dimen[i/3][i%3] = v.at(i);
-
-    return vector_dimen;
-}
-
-vector<vector<GLint> > Figura::unitobi(vector<GLint> &c){
-    int num_filas = c.size() / 3;
-    vector<vector<GLint> > vector_dimen(num_filas, vector<GLint>(3));
-    
-    for (int i = 0; i < c.size(); ++i)
-        vector_dimen[i/3][i%3] = c.at(i);
-
-    return vector_dimen;
-}
-
-Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras){
-    this->vertex = this->unitobi(vertice);
-    this->caras =  this->unitobi(caras);
-}
-
-void Figura::draw(){
-
-    glColor3f(0,0,1);
-    glPointSize(4);
-   
-    glPolygonMode(GL_FRONT, GL_FILL);
-    glPolygonMode(GL_BACK, GL_LINE);
-   
-    glBegin(GL_TRIANGLES);
-
-    for (int i = 0; i < this->caras.size(); i++){
-
-        if (i%3==0) glColor3f(0,1,0);
-        else if (i%3==1) glColor3f(0,0,1);
-
-        glVertex3fv((GLfloat*) vertex[caras[i][0]].data());
-        glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
-        glVertex3fv((GLfloat*) vertex[caras[i][2]].data());
-    }
-    glEnd();
- 
 }
 
