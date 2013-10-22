@@ -6,78 +6,114 @@
 // GPL
 //**************************************************************************
 
-#include "user_code.h"
+#include <vector>
+#include <stdio.h>
 
+#include "user_code.h"
+#include "file_ply_stl.h"
 //**************************************************************************
 // Funcion para dibujar los vertices de un cubo unidad
 //***************************************************************************
+
+void draw(vector<float> &vertices, vector<int> &caras){
+
+    Figura figura(vertices, caras);
+    figura.draw();
+    /*
+    // Convertir vector de vertices a uno bidimensional de tamaño 3
+    int num_filas = vertices.size() / 3;
+ //   GLfloat v[num_filas][3];
+    
+//    for (int i = 0; i < vertices.size(); ++i)
+//        v[i/3][i%3] = vertices.at(i);
+
+    int num_filas_caras = caras.size() / 3;
+ //   GLint c[num_filas_caras][3];
+
+//    for (int i = 0; i < caras.size(); ++i)
+//        c[i/3][i%3] = caras.at(i);
+*/
+//////////////
+/*    vector<vector<GLfloat> > vec_vert(num_filas, vector<GLfloat>(3));
+    vector<vector<GLint> > vec_car(num_filas_caras, vector<GLint>(3));
+
+    for (int i = 0; i < vertices.size(); i++)
+        vec_vert[i/3][i%3] = vertices.at(i);
+    for (int i = 0; i < caras.size(); i++)
+        vec_car[i/3][i%3] = caras.at(i);
+
+    glColor3f(0,0,1);
+    glPointSize(4);
+   
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
+   
+    glBegin(GL_TRIANGLES);
+    
+    for (int i = 0; i < caras.size()/3; i++){
+        
+        if (i%3==0) glColor3f(0,1,0);
+        else if (i%3==1) glColor3f(0,0,1);
+//        else glColor3f(0,1,1);
+
+        glVertex3fv((GLfloat*) vec_vert[vec_car[i][0]].data());;
+        glVertex3fv((GLfloat*) vec_vert[vec_car[i][1]].data());
+        glVertex3fv((GLfloat*) vec_vert[vec_car[i][2]].data());
+    }
+    glEnd();
+
+*/
+/////////////
+
+/*
+    glColor3f(0,0,1);
+    glPointSize(4);
+   
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
+   
+    glBegin(GL_TRIANGLES);
+    
+    for (int i = 0; i < caras.size()/3; i++){
+        
+        if (i%3==0) glColor3f(0,1,0);
+        else if (i%3==1) glColor3f(0,0,1);
+//        else glColor3f(0,1,1);
+
+        glVertex3fv((GLfloat*) &v[c[i][0]]);;
+        glVertex3fv((GLfloat*) &v[c[i][1]]);
+        glVertex3fv((GLfloat*) &v[c[i][2]]);
+    }
+    glEnd();
+*/
+}
 
 void draw_cube()
 {
     GLfloat Vertices[8][3]= {{-0.5,-0.5,0.5},{0.5,-0.5,0.5},{0.5,0.5,0.5},{-0.5,0.5,0.5},{-0.5,-0.5,-0.5},{0.5,-0.5,-0.5},{0.5,0.5,-0.5},{-0.5,0.5,-0.5}};
 
+    GLint   Caras[12][3] = {
+        {0,1,3}, {1,2,3},   // cara 1
+        {1,5,2}, {5,6,2},   // cara 2
+        {2,6,3}, {3,6,7},   // cara 3
+        {7,4,0}, {3,7,0},   // cara 4
+        {5,1,0}, {0,4,5},   // cara 5
+        {6,5,4}, {4,7,6}    // cara 6
+    };  
+    
     glColor3f(0,0,1);
     glPointSize(4);
-
-glPolygonMode(GL_FRONT,GL_LINES);
-glBegin(GL_POLYGON);
-            glVertex3f(Vertices[2][0], Vertices[2][1], Vertices[2][2]); // + + +
-            glVertex3f(Vertices[3][0], Vertices[3][1], Vertices[3][2]); // - + +
-            glVertex3f(Vertices[0][0], Vertices[0][1], Vertices[0][2]); // - - +
-            glVertex3f(Vertices[1][0], Vertices[1][1], Vertices[1][2]); // + - +
-glEnd();
-glBegin(GL_POLYGON);
-glColor3f(0,1,0);
-            glVertex3f(Vertices[6][0], Vertices[6][1], Vertices[6][2]); // + + -
-            glVertex3f(Vertices[7][0], Vertices[7][1], Vertices[7][2]); // - + -
-            glVertex3f(Vertices[4][0], Vertices[4][1], Vertices[4][2]); // - - -
-            glVertex3f(Vertices[5][0], Vertices[5][1], Vertices[5][2]); // + - -
-glEnd();
-glBegin(GL_POLYGON);
-glColor3f(1,0,0);
-            glVertex3f(Vertices[1][0], Vertices[1][1], Vertices[1][2]);
-            glVertex3f(Vertices[5][0], Vertices[5][1], Vertices[5][2]);
-            glVertex3f(Vertices[6][0], Vertices[6][1], Vertices[6][2]);
-            glVertex3f(Vertices[2][0], Vertices[2][1], Vertices[2][2]);
-glEnd();
-glBegin(GL_POLYGON);
-glColor3f(0,0,0);
-            glVertex3f(Vertices[7][0], Vertices[7][1], Vertices[7][2]);
-            glVertex3f(Vertices[4][0], Vertices[4][1], Vertices[4][2]);
-            glVertex3f(Vertices[0][0], Vertices[0][1], Vertices[0][2]);
-            glVertex3f(Vertices[3][0], Vertices[3][1], Vertices[3][2]);
-glEnd();
-glBegin(GL_POLYGON);
-glColor3f(0,1,1);
-            glVertex3f(Vertices[1][0], Vertices[1][1], Vertices[1][2]);
-            glVertex3f(Vertices[5][0], Vertices[5][1], Vertices[5][2]);
-            glVertex3f(Vertices[4][0], Vertices[4][1], Vertices[4][2]);
-            glVertex3f(Vertices[0][0], Vertices[0][1], Vertices[0][2]);
-glEnd();
-glBegin(GL_POLYGON);
-glColor3f(1,0,1);
-            glVertex3f(Vertices[2][0], Vertices[2][1], Vertices[2][2]);
-            glVertex3f(Vertices[6][0], Vertices[6][1], Vertices[6][2]);
-            glVertex3f(Vertices[7][0], Vertices[7][1], Vertices[7][2]);
-            glVertex3f(Vertices[3][0], Vertices[3][1], Vertices[3][2]);
-glEnd();
-
-   //         glVertex3fv((GLfloat *) &Vertices[i]);
-//           }
-        // Hay que dibujar 6 caras, pero como son triangulos son 12.
-        // El recorrido para dibujar las caras debe hacerse en el sentido contrario a las agujas del reloj
-        // Hay que guardar en la estructura los vertices y la topologia, es decir las caras que se forman, 
-        // siempre al contrario de las agujas, USando GL_POLYGON o GL_TRIANGLE
-        // Entre el begin se debe llamar 3 veces a glvertex3f usando la topoligia, 
-        // Es decir, hace 12 llamadas en las cuales se llama a 3 veces glvertex rellenando en sentido inverso
-        // los vertices
-        //
-        // Para la practica, dado un objeto con n puntos y n caras, hay que pintarlo como solido, como línea y como punto.
-        // Crear una ED que para almacenar los vertices y otra para las caras
-        // una funcoin pintar_puntos(listapuntos, n), 
-        // pintar_aristas(lista_puntos, lista de caras, n)
-        // puntar_caras(lista_puntos, lista_caras, n)
-        // pintar_caras_ajadrez(igual que la de antes pero impares != color)
+   
+   glPolygonMode(GL_FRONT, GL_FILL);
+   glPolygonMode(GL_BACK, GL_LINE);
+   
+   glBegin(GL_TRIANGLES);
+    for (int i = 0; i < 12 ; i++){
+        glVertex3fv((GLfloat*) &Vertices[Caras[i][0]]);
+        glVertex3fv((GLfloat*) &Vertices[Caras[i][1]]);
+        glVertex3fv((GLfloat*) &Vertices[Caras[i][2]]);
+   }
+    glEnd();
 }
 
 //**************************************************************************
@@ -86,15 +122,71 @@ glEnd();
 
 void draw_vertices(vector<float> &Vertices)
 {
-    //GLfloat Vertices[8][3]= {{-0.5,-0.5,0.5},{0.5,-0.5,0.5},{0.5,0.5,0.5},{-0.5,0.5,0.5},{-0.5,-0.5,-0.5},{0.5,-0.5,-0.5},{0.5,0.5,-0.5},{-0.5,0.5,-0.5}};
+    //GLfloat ertices[8][3]= {{-0.5,-0.5,0.5},{0.5,-0.5,0.5},{0.5,0.5,0.5},{-0.5,0.5,0.5},{-0.5,-0.5,-0.5},{0.5,-0.5,-0.5},{0.5,0.5,-0.5},{-0.5,0.5,-0.5}};
     
+    int num_filas = Vertices.size() / 3;
+    GLfloat v[num_filas][3];
+    
+    for (int i = 0; i < Vertices.size(); ++i)
+        v[i/3][i%3] = Vertices.at(i);
+
+
+
     glColor3f(0,1,0);
     glPointSize(4);
 
     glBegin(GL_POINTS);
-    for (unsigned i = 0; i < 8 ; i++)
-        glVertex3fv((GLfloat*) &Vertices[i]);
+    for (unsigned i = 0; i < num_filas ; i++)
+        glVertex3fv((GLfloat*) &v[i]);
 
     glEnd();
+}
+
+vector<vector<GLfloat> > Figura::unitobi(vector<GLfloat> &v){
+    int num_filas = v.size() / 3;
+    vector<vector<GLfloat> > vector_dimen(num_filas, vector<GLfloat>(3));
+
+    for (int i = 0; i < v.size(); ++i)
+        vector_dimen[i/3][i%3] = v.at(i);
+
+    return vector_dimen;
+}
+
+vector<vector<GLint> > Figura::unitobi(vector<GLint> &c){
+    int num_filas = c.size() / 3;
+    vector<vector<GLint> > vector_dimen(num_filas, vector<GLint>(3));
+    
+    for (int i = 0; i < c.size(); ++i)
+        vector_dimen[i/3][i%3] = c.at(i);
+
+    return vector_dimen;
+}
+
+Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras){
+    this->vertex = this->unitobi(vertice);
+    this->caras =  this->unitobi(caras);
+}
+
+void Figura::draw(){
+
+    glColor3f(0,0,1);
+    glPointSize(4);
+   
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
+   
+    glBegin(GL_TRIANGLES);
+
+    for (int i = 0; i < this->caras.size(); i++){
+
+        if (i%3==0) glColor3f(0,1,0);
+        else if (i%3==1) glColor3f(0,0,1);
+
+        glVertex3fv((GLfloat*) vertex[caras[i][0]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][2]].data());
+    }
+    glEnd();
+ 
 }
 

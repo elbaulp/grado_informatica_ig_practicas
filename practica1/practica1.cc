@@ -12,6 +12,13 @@
 #include <ctype.h>
 #include "user_code.h"
 
+#include <vector>    
+#include "file_ply_stl.h"
+
+// Caras y vertices
+std::vector<GLfloat> vertices_ply ; // coordenadas de vértices
+std::vector<GLint>   caras_ply ;    // índices de vértices de triángulos
+
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
 
@@ -96,7 +103,11 @@ glEnd();
 
 void draw_objects()
 {
-    draw_cube();
+    //draw_cube();
+    draw(vertices_ply, caras_ply);
+ //draw_vertices(vertices_ply);  
+//    Figura figura(vertices_ply, caras_ply);
+//    figura.draw();
 }
 
 
@@ -211,6 +222,11 @@ glViewport(0,0,UI_window_width,UI_window_height);
 
 int main(int argc, char **argv)
 {
+    if (argc <= 1)
+        printf("Debes proporcionar un fichero ply\n");
+    
+    ply::read( argv[1], vertices_ply, caras_ply );
+ 
     // se llama a la inicialización de glut
     glutInit(&argc, argv);
 

@@ -1,307 +1,275 @@
-//******************************************************************************
-// class to read ply files of triangles
-//
-// Domingo Martín Perandres (c) 2003-2013
-//
-// Gnu Public Licence
-//******************************************************************************
+// *********************************************************************
+// **
+// ** Función ply::read (declaraciones)
+// ** 
+// ** Carlos Ureña - 2012- 2013
+// **
+// ** This program is free software: you can redistribute it and/or modify
+// ** it under the terms of the GNU General Public License as published by
+// ** the Free Software Foundation, either version 3 of the License, or
+// ** (at your option) any later version.
+// **
+// ** This program is distributed in the hope that it will be useful,
+// ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+// ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// ** GNU General Public License for more details.
+// **
+// ** You should have received a copy of the GNU General Public License
+// ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// **
+// *********************************************************************
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <limits>
+#include <assert.h>
 
 #include "file_ply_stl.h"
 
-//******************************************************************************
-//
-//******************************************************************************
 
-
-_file_ply::_file_ply()
-{
-_element_token_table Element1;
-const char* Text_tokens[]={"ply","format","ascii","element","vertex","face","end_header","zzzzzzzz",""};
-
-for (int i=0;i<_tokens(NUMBER);i++)
-	{
-	Element1.Text=Text_tokens[i];
-	Element1.Token=(_tokens) i;
-	Token_table.push_back(Element1);
-	}
-
-Debug=false;
-Buffer[0]='\0';
-Num_lines=0;
-}
-
-//******************************************************************************
-//
-//******************************************************************************
-
-int _file_ply::open(char *File_name)
+namespace ply 
 {
 
-if ((File=fopen(File_name,"r"))==NULL)
-	{
-	printf("Error: the file %s cannot be opened\n",File_name);
-	return(-1);
-	}
-return(0);
-}
+using namespace std ;
 
-//******************************************************************************
-//
-//******************************************************************************
+//**********************************************************************
+// funciones auxiliares:
 
-int _file_ply::create(char *File_name)
+void abrir_archivo() ;
+void leer_cabecera() ;
+void error( const char *msg_error ) ;
+void leer_vertices( vector<float> & vertices ) ;
+void leer_caras( vector<int> & caras ) ;
+
+//**********************************************************************
+// variables usadas por todas las funciones:
+
+
+const streamsize 
+      tam_buffer = streamsize(10)*streamsize(1024) ;
+char 
+      buffer[unsigned(tam_buffer)];
+string 
+      token,
+      nombre_archivo ;
+long long int 
+      num_vertices = 0, 
+      num_caras   = 0 ;
+unsigned
+      state    = 0; // 0 antes de leer 'element vertex' (o 'element face'), 1 antes de leer 'element face', 2 después
+bool 
+      en_cabecera = true ;
+ifstream  
+      src ;
+      
+//**********************************************************************
+// funcion principal de lectura
+
+void read
+(  const char *    nombre_archivo_se, 
+   vector<float> & vertices, 
+   vector<int> &   caras
+)
 {
-
-if ((File=fopen(File_name,"w"))==NULL)
-	{
-	printf("Error: the file %s cannot be created\n",File_name);
-	return(-1);
-	}
-return(0);
+   // modelos ply en:
+   // http://graphics.im.ntu.edu.tw/~robin/courses/cg03/model/
+   // http://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
+   // univ stanford ?
+   
+   nombre_archivo = nombre_archivo_se ;
+   nombre_archivo += ".ply" ;
+   
+   abrir_archivo() ;
+   leer_cabecera() ;
+   leer_vertices(vertices) ;
+   leer_caras(caras) ;   
+   
+   cout << "archivo ply leido." << endl << flush ;
 }
 
-//******************************************************************************
-//
-//******************************************************************************
 
-int _file_ply::read_line()
+//**********************************************************************
+
+void leer_vertices( vector<float> & vertices )
 {
+   // leer vértices:
+      
+   vertices.resize( num_vertices*3 );
 
+   cout << "  leyendo " << num_vertices << " vértices ...." << endl << flush ;
+     
+   for( long long iv = 0 ; iv < num_vertices ; iv++ )
+   {
+      if ( src.eof() ) 
+         error("fin de archivo prematuro en la lista de vértices");
 
-if (!feof(File))
-	{
-	fgets(Buffer,MAX_LENGTH_LINE,File);
-	if (strlen(Buffer)==0) return(-1);
-	Num_lines++;
-	//printf("%d:%s",Num_lines,Buffer);	
-	return(0);
-	}	
-return(-1);	
+      double x,y,z ;
+
+      src >> x >> y >> z ;
+      //cout << "vertex #" << iv << " readed: (" << x << "," << y << "," << z << ")" << endl ;
+      
+      src.getline(buffer,tam_buffer); // ignore more properties, so far ...
+      
+      // add new vertex
+      long long base = iv*3 ;
+      vertices[base+0] = x ;
+      vertices[base+1] = y ;
+      vertices[base+2] = z ; 
+   }
+   cout << "  fin de la lista de vértices" << endl << flush ;   
 }
 
-//******************************************************************************
-//
-//******************************************************************************
+//**********************************************************************
 
-int _file_ply::next_token()
+void leer_caras(  vector<int> & caras )
 {
-char *p1,*p2;
-char Aux_token[100];
-int Num_char;
+   cout << "  leyendo " << num_caras << " caras ...." << endl << flush ;
+   
+   caras.resize( num_caras*3 );
+   
+   for( long long ifa = 0 ; ifa < num_caras ; ifa++ )
+   {
+      if ( src.eof() ) 
+         error("fin de archivo prematuro en la lista de caras");
 
-do
-	{
-	if (strlen(Buffer)==0) 
-		{
-		if (read_line()==-1) return(-1);
-		while (Buffer[0]=='#') if (read_line()==-1) return(-1);
-		}
-	p1=Buffer;
-	while ((*p1==' ' || *p1=='\t') && *p1!='\n') p1++;
-	p2=p1;
-	while (*p2!=' ' && *p2!='\t' && *p2!='\n') p2++;	
-	Num_char=p2-p1;
-	if (Num_char>99) 
-		{
-		error("number of characters for token is too long\n");
-		return(-1);
-		}
-	if (Num_char!=0)
-		{
-		strncpy(Aux_token,p1,Num_char);
-		Aux_token[Num_char]='\0';
-		}
-	if (*p2=='\n') Buffer[0]='\0';
-	else strcpy(Buffer,p2);
-	}
-while (Num_char==0);
+      unsigned nv ;
+      src >> nv ;
+      //cout << "reading face #" << ifa << " with " << nv << " vertexes: " ;
+      
+      if ( nv != 3 )
+         error("encontrada una cara con un número de vértices distinto de 3");
+         
+      long long iv0, iv1, iv2 ;
 
-if (!is_number(Aux_token))
-	{
-	//printf("es un numero %s\n",Aux_token);
-	Yylval.Real=atof(Aux_token);
-	return((int)_tokens(NUMBER));
-	}
-else
-	{
-	//printf("es texto %s\n",Aux_token);
-	Yylval.Text=Aux_token;
-	return(search_token(Aux_token));
-	}
+      src >> iv0 >> iv1 >> iv2 ;
+      //cout << " " << iv0 << ", " << iv1 << ", " << iv2 << endl ;
+
+      if ( iv0 >= num_vertices || iv1 >= num_vertices || iv2 >= num_vertices )
+         error("encontrado algún índice de vértice igual o superior al número de vértices");
+         
+      src.getline(buffer,tam_buffer); // ignore more properties, so far ...
+      
+      long long base = ifa*3 ; 
+      caras[base+0] = iv0 ;
+      caras[base+1] = iv1 ;
+      caras[base+2] = iv2 ;
+   }
+   cout << "  fin de la lista de caras." << endl ;
 }
 
-//******************************************************************************
-//
-//******************************************************************************
+//**********************************************************************
 
-int _file_ply::
-read(vector<float> &Vertices,vector<int> &Faces)
+void leer_cabecera()
 {
-int Next_token,i,j;
-int Num_vertices,Num_faces;
+   // leer cabecera:
+   
+   while( en_cabecera )
+   {
+      if ( src.eof() ) 
+         error("fin de archivo prematuro antes de end_header");
 
-if (File!=NULL)
-	{
-	Next_token=next_token();
-	if (Next_token==PLY)
-		{
-		Next_token=next_token();
-		if (Next_token==FORMAT)
-			{
-			Next_token=next_token();
-			if (Next_token==ASCII)
-				{
-				Next_token=next_token();
-				if (Next_token==NUMBER)
-					{// head
-					Next_token=next_token();
-					while (Next_token!=END_HEADER)
-						{
-						if (Next_token==ELEMENT)
-							{
-							Next_token=next_token();
-							switch (Next_token)
-								{
-								case VERTEX:
-									Next_token=next_token();
-									if (Next_token==NUMBER)
-										{
-          					Num_vertices=(int) Yylval.Real;
-										Vertices.resize(Num_vertices*3);
-										}
-									else error("no number of vertex");
-									break;
-								case FACE:
-									Next_token=next_token();
-									if (Next_token==NUMBER)
-										{
-          					Num_faces=(int) Yylval.Real;
-										Faces.resize(Num_faces*3);
-										}
-									else error("no number of faces");
-									break;
-								default:
-									error("element type not supported");
-									break;
-								}
-							}
-						Next_token=next_token();
-						}
-					// data
-					// vertices data
-					for (i=0;i<Num_vertices;i++)
-						{// vertices data
-						for (j=0;j<3;j++)
-							{
-							Next_token=next_token();
-							if (Next_token==NUMBER)
-								{
-								Vertices[i*3+j]=Yylval.Real;
-								}
-							else error("no number for coordinate");
-							}
-						}
-					// faces data
-					for (i=0;i<Num_faces;i++)
-						{
-						Next_token=next_token();
-						if (Next_token==NUMBER)
-							{
-							if ((int)Yylval.Real!=3) {
-								printf("Face=%d Token=%s\n",i,Yylval.Text.c_str());
-								error("only triangles supported");;
-								}
-							}
-						else error("no number of vertex indices");
-						for (j=0;j<3;j++)
-							{
-							Next_token=next_token();
-							if (Next_token==NUMBER)
-								{
-								Faces[i*3+j]=(int)Yylval.Real;
-								}
-							else error("no number for coordinate");
-							}
-						}
-					printf("File readed\n");
-					}
-				else error("no format number");
-				}
-			else error("no ascii format");
-			}
-		else error("no format word");
-		}
-	else error("this is not a ply file");
-	return(0);
-	}
-else
-	{
-	error("there is not a ply file open");
-	return(-1);
-	}
+     src >> token ;
+
+     if ( token == "end_header" )
+     {  if ( state != 2 )
+           error("no encuentro 'element vertex' o 'element face' en la cabecera");
+        src.getline(buffer,tam_buffer);
+        en_cabecera = false ;
+     }
+     else if ( token == "comment" )
+     {  src.getline(buffer,tam_buffer);
+        cout << "  comment: " << buffer << endl ;
+     }
+     else if ( token == "format" )
+     {  src >> token ;
+        if ( token != "ascii" )
+        {  string msg = string("el formato del ply no es 'ascii' es '")+token+"', no lo puedo leer" ;
+           error(msg.c_str());
+        }
+        src.getline(buffer,tam_buffer);
+     }
+     else if ( token == "element" )
+     {  src >> token ;
+        if ( token == "vertex" )
+        {  if ( state != 0 )
+              error("la línea 'element vertex' va después de 'element face'");
+           src >> num_vertices ;
+           cout << "  numero de vértices == " << num_vertices << endl ;
+           state = 1 ;
+        }
+        else if ( token == "face" )
+        {  if ( state != 1 )
+              error("advertencia 'element vertex' va después de 'element face'");
+           src >> num_caras ;
+           cout << "  número de caras == " << num_caras << endl ;
+           state = 2 ;
+        }
+        else
+        {  cout << "  elemento '" + token + "' ignorado." << endl ;
+        }
+        src.getline(buffer,tam_buffer);
+     }
+     else if ( token == "property" )
+     {  src.getline(buffer,tam_buffer); // ignore properties, so far ...
+     }
+   } // end of while( en_cabecera )
+
+   if ( num_vertices == 0 || num_caras == 0 )
+      error("no se ha encontrado el número de vértices o caras, o bien alguno de los dos es 0.");
+      
+   if ( num_vertices > numeric_limits<unsigned>::max() )
+      error("el número de vértices es superior al valor 'int' más grande posible.");
+      
+   
+   if ( num_caras > numeric_limits<unsigned>::max() )
+      error("el número de caras es superior al valor 'int' más grande posible.");
 }
 
-//******************************************************************************
-//
-//******************************************************************************
+//**********************************************************************
 
-//int _file_ply::write(vector<float> &Vertices,vector<int> &Faces)
-//{
-//    error("Not implemented");
-//    return(0);
-//}
 
-//******************************************************************************
-//
-//******************************************************************************
-
-int _file_ply::close()
+void abrir_archivo()
 {
+   using namespace std ;
 
-fclose(File);
-return(0);
+   src.open( nombre_archivo.c_str() ) ; // abrir (¿en modo lectura?)
+      
+   if ( ! src.is_open() ) 
+   {
+      string msg = string("no puedo abrir el archivo '") + nombre_archivo + "' para lectura." ; 
+      error(msg.c_str());
+   }
+    
+   src >> token ;
+
+   if ( token != "ply" )
+      error("el archivo de entrada no comienza con 'ply'");
+
+   src.getline(buffer,tam_buffer);
+
+   cout << "leyendo archivo ply '" + nombre_archivo + "'" << endl ;
 }
 
-//******************************************************************************
-//
-//******************************************************************************
 
-void _file_ply::error(const char *Error)
+//**********************************************************************
+
+void error( const char *msg_error )
 {
-
-printf("Error: %s. Stop in line %d\n",Error,Num_lines);         
-exit(-1);
+   using namespace std ;
+   cout << "error leyendo archivo ply: " << msg_error << endl 
+        << "programa terminado." << endl
+        << flush ; 
+        
+   exit(1);
 }
 
-//******************************************************************************
-//
-//******************************************************************************
 
-int _file_ply::is_number(char *Aux_token)
-{
-char *p1;
 
-for (unsigned int i=0;i<strlen(Aux_token);i++)
-	{
-    if ((p1=strchr((char *)"0123456789.+-eE",Aux_token[i]))==NULL) return(-1);
-	}
-return(0);
-}
 
-//******************************************************************************
-//
-//******************************************************************************
-
-int _file_ply::search_token(char *Aux_token)
-{
-int i=0;
-
-while (!(Token_table[i].Text=="zzzzzzzz"))
-	{
-	//printf("Buscando token %d %s\n",i,Token_table[i].Text.c_str());
-	if (Token_table[i].Text==Aux_token) break;
-	i++;
-	}
-//getchar();	
-return(i);
-}
+} // fin namespace _file_ply
