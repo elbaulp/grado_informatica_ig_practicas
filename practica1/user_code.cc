@@ -48,7 +48,7 @@ Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras){
 void Figura::draw(){
 
     glColor3f(0,0,1);
-    glPointSize(4);
+    glPointSize(2);
    
     glPolygonMode(GL_FRONT, GL_FILL);
     glPolygonMode(GL_BACK, GL_LINE);
