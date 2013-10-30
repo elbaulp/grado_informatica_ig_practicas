@@ -21,8 +21,8 @@ void draw(vector<float> &vertices, vector<int> &caras, string tipo){
     figura.draw();
 }
 
-void draw(vector<float> &vertices, string tipo){
-    Figura figura(vertices, tipo);
+void draw(vector<float> &vertices, string tipo, unsigned int rotacion){
+    Figura figura(vertices, tipo, rotacion);
     figura.draw_vertices();
 }
 
@@ -32,15 +32,16 @@ Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras, string tipo){
     this->tipo.assign(tipo);
 }
 
-Figura::Figura(vector<float> &vertice, string tipo){
+Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
     this->vertex = this->unitobi(vertice);
     this->tipo.assign(tipo);
 
-    cout << "Tama" << vertex.size() << endl;
-    for (int i=0; i < 11 * 50 ; i++){
-        GLfloat x = vertex[i].data()[0] * cos(((360/50) * M_PI)/180)  + vertex[i].data()[2] * sin(((360/50) * M_PI)/180);
+    for (int i=0; i < this->num_filas * rotacion ; i++){
+        GLfloat x = vertex[i].data()[0] * cos(((360/rotacion) * M_PI)/180)
+            + vertex[i].data()[2] * sin(((360/rotacion) * M_PI)/180);
         GLfloat y = vertex[i].data()[1];
-        GLfloat z = -sin(((360/50)*M_PI)/180) * vertex[i].data()[0] + vertex[i].data()[2] * cos(((360/50)*M_PI)/180);
+        GLfloat z = -sin(((360/rotacion)*M_PI)/180) * vertex[i].data()[0] 
+            + vertex[i].data()[2] * cos(((360/rotacion)*M_PI)/180);
     
         vector<GLfloat> v;
         v.push_back(x);
@@ -48,8 +49,6 @@ Figura::Figura(vector<float> &vertice, string tipo){
         v.push_back(z);
         this->vertex.push_back(v);
     }
-    cout << "af" << vertex.size() << endl;
-
 }
 
 //**************************************************************************
@@ -104,6 +103,7 @@ void Figura::draw(){
 
 vector<vector<GLfloat> > Figura::unitobi(vector<GLfloat> &v){
     int num_filas = v.size() / 3;
+    this->num_filas = num_filas;
     vector<vector<GLfloat> > vector_dimen(num_filas, vector<GLfloat>(3));
 
     for (int i = 0; i < v.size(); ++i)

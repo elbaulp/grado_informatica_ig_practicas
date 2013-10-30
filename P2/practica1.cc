@@ -20,6 +20,7 @@
 std::vector<GLfloat> vertices_ply; // coordenadas de vértices
 std::vector<GLint>   caras_ply;    // índices de vértices de triángulos
 string tipo;
+unsigned int rotacion;
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
 
@@ -105,7 +106,7 @@ glEnd();
 void draw_objects()
 {
     if (caras_ply.size() == 0)
-        draw(vertices_ply, tipo);
+        draw(vertices_ply, tipo, rotacion);
     else
         draw(vertices_ply, caras_ply, tipo);
 }
@@ -222,15 +223,17 @@ glViewport(0,0,UI_window_width,UI_window_height);
 
 int main(int argc, char **argv)
 {
-    if (argc <= 1)
-        printf("Debes proporcionar un fichero ply\n");
- 
+    if (argc <= 3){
+        printf("Debes proporcionar un fichero ply, un tipo de dibujo y el número de rotaciones\n");
+        exit(1);
+    }
     if (strcmp(argv[2],"alambre") == 0) 
         tipo.assign("alambre");
     if (strcmp(argv[2],"solido") == 0) 
         tipo.assign("solido");
     if (strcmp(argv[2],"ajedrez") == 0) 
         tipo.assign("ajedrez");
+    rotacion = atoi(argv[3]);
     //ply::read( argv[1], vertices_ply, caras_ply );
     _file_ply myply;
     myply.open(argv[1]);
