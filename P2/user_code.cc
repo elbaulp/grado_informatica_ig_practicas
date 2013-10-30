@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <stdio.h>
+#include <math.h>
 
 #include "user_code.h"
 #include "file_ply_stl.h"
@@ -34,6 +35,21 @@ Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras, string tipo){
 Figura::Figura(vector<float> &vertice, string tipo){
     this->vertex = this->unitobi(vertice);
     this->tipo.assign(tipo);
+
+    cout << "Tama" << vertex.size() << endl;
+    for (int i=0; i < 11 * 50 ; i++){
+        GLfloat x = vertex[i].data()[0] * cos(((360/50) * M_PI)/180)  + vertex[i].data()[2] * sin(((360/50) * M_PI)/180);
+        GLfloat y = vertex[i].data()[1];
+        GLfloat z = -sin(((360/50)*M_PI)/180) * vertex[i].data()[0] + vertex[i].data()[2] * cos(((360/50)*M_PI)/180);
+    
+        vector<GLfloat> v;
+        v.push_back(x);
+        v.push_back(y);
+        v.push_back(z);
+        this->vertex.push_back(v);
+    }
+    cout << "af" << vertex.size() << endl;
+
 }
 
 //**************************************************************************

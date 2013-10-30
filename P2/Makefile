@@ -53,8 +53,8 @@ superclean:
 #
 tgz:
 	rm -f *.o
-	rm *~
-	rm *.*~
+	rm -f *~
+	rm -f *.*~
 	rm -f $(TARGETS)
 	tar -zcvf $(TARGETS).tgz *
 
