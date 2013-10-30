@@ -25,26 +25,6 @@ void draw(vector<float> &vertices, string tipo){
     figura.draw_vertices();
 }
 
-vector<vector<GLfloat> > Figura::unitobi(vector<GLfloat> &v){
-    int num_filas = v.size() / 3;
-    vector<vector<GLfloat> > vector_dimen(num_filas, vector<GLfloat>(3));
-
-    for (int i = 0; i < v.size(); ++i)
-        vector_dimen[i/3][i%3] = v.at(i);
-
-    return vector_dimen;
-}
-
-vector<vector<GLint> > Figura::unitobi(vector<GLint> &c){
-    int num_filas = c.size() / 3;
-    vector<vector<GLint> > vector_dimen(num_filas, vector<GLint>(3));
-    
-    for (int i = 0; i < c.size(); ++i)
-        vector_dimen[i/3][i%3] = c.at(i);
-
-    return vector_dimen;
-}
-
 Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras, string tipo){
     this->vertex = this->unitobi(vertice);
     this->caras =  this->unitobi(caras);
@@ -104,4 +84,24 @@ void Figura::draw(){
     }
     glEnd();
  
+}
+
+vector<vector<GLfloat> > Figura::unitobi(vector<GLfloat> &v){
+    int num_filas = v.size() / 3;
+    vector<vector<GLfloat> > vector_dimen(num_filas, vector<GLfloat>(3));
+
+    for (int i = 0; i < v.size(); ++i)
+        vector_dimen[i/3][i%3] = v.at(i);
+
+    return vector_dimen;
+}
+
+vector<vector<GLint> > Figura::unitobi(vector<GLint> &c){
+    int num_filas = c.size() / 3;
+    vector<vector<GLint> > vector_dimen(num_filas, vector<GLint>(3));
+    
+    for (int i = 0; i < c.size(); ++i)
+        vector_dimen[i/3][i%3] = c.at(i);
+
+    return vector_dimen;
 }
