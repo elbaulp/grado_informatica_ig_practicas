@@ -33,4 +33,5 @@ public:
     
     void draw_vertices();
     void draw();
+    void draw_triangles();
 };

@@ -233,6 +233,8 @@ int main(int argc, char **argv)
         tipo.assign("solido");
     if (strcmp(argv[2],"ajedrez") == 0) 
         tipo.assign("ajedrez");
+    if (strcmp(argv[2], "puntos") == 0)
+        tipo.assign("puntos");
     rotacion = atoi(argv[3]);
     //ply::read( argv[1], vertices_ply, caras_ply );
     _file_ply myply;

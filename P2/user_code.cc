@@ -23,7 +23,12 @@ void draw(vector<float> &vertices, vector<int> &caras, string tipo){
 
 void draw(vector<float> &vertices, string tipo, unsigned int rotacion){
     Figura figura(vertices, tipo, rotacion);
-    figura.draw_vertices();
+    if (tipo.compare("alambre") == 0 ||
+            tipo.compare("solido") == 0 ||
+            tipo.compare("ajedrez") == 0)
+        figura.draw_triangles();
+    if (tipo.compare("puntos") == 0)
+        figura.draw_vertices();
 }
 
 Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras, string tipo){
@@ -34,6 +39,7 @@ Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras, string tipo){
 
 Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
     this->vertex = this->unitobi(vertice);
+    this->caras = std::vector<vector<GLint> >();
     this->tipo.assign(tipo);
 
     for (int i=0; i < this->num_filas * rotacion ; i++){
@@ -48,22 +54,80 @@ Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
         v.push_back(y);
         v.push_back(z);
         this->vertex.push_back(v);
+
+        /* Constrir el vector de caras */
+        uint v_number = this->vertex.size()-1;
+        vector<GLint> c;
+        vector<GLint> c2;
+        
+        if ( v_number % this->num_filas){
+            c.push_back(v_number);
+            c.push_back(v_number - 1);
+            c.push_back(i);
+            
+            if ( v_number % this->num_filas != 1){
+                c2.push_back(v_number - 1);
+                c2.push_back(i - 1);
+                c2.push_back(i);
+            }
+        } else {
+            c.push_back(v_number);
+            c.push_back(i);
+            c.push_back(i + 1);
+        }
+        this->caras.push_back(c);
+        if ( ! c2.empty() ) 
+            this->caras.push_back(c2);
     }
 }
 
 //**************************************************************************
 // Funcion para dibujar vertices
 //***************************************************************************
-
 void Figura::draw_vertices()
 {
     glColor3f(0,1,0);
     glPointSize(4);
-
+    
     glBegin(GL_POINTS);
     for (unsigned i = 0; i < vertex.size() ; i++)
         glVertex3fv((GLfloat*) vertex[i].data());
 
+    glEnd();
+}
+
+/**
+ * Dibujar con triángulos
+ */
+void Figura::draw_triangles(){
+    glColor3f(0,0,1);
+    glPointSize(2);
+
+    bool ajedrez = false;
+
+    if (this->tipo.compare("solido")==0)
+        glPolygonMode(GL_FRONT, GL_FILL);
+    else if (this->tipo.compare("alambre") == 0)
+        glPolygonMode(GL_FRONT, GL_LINE);
+    else if (this->tipo.compare("ajedrez") == 0){
+        glPolygonMode(GL_FRONT, GL_FILL);
+        ajedrez = true;
+    }
+    else glPolygonMode(GL_FRONT, GL_FILL);
+    
+    //glPolygonMode(GL_BACK, GL_LINE);
+    
+    glBegin(GL_TRIANGLES);
+
+    for (int i = 0; i < this->caras.size() - 1; i++){
+        if (ajedrez){
+            if (i%3==0) glColor3f(0,1,0);   
+            else if (i%3==1) glColor3f(0,0,1);
+        }
+        glVertex3fv((GLfloat*) vertex[caras[i][0]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][2]].data());
+    }
     glEnd();
 }
 
