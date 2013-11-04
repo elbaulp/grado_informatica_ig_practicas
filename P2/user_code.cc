@@ -124,9 +124,9 @@ void Figura::draw_triangles(){
             if (i%3==0) glColor3f(0,1,0);   
             else if (i%3==1) glColor3f(0,0,1);
         }
-        glVertex3fv((GLfloat*) vertex[caras[i][0]].data());
-        glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
         glVertex3fv((GLfloat*) vertex[caras[i][2]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
+        glVertex3fv((GLfloat*) vertex[caras[i][0]].data());
     }
     glEnd();
 }
