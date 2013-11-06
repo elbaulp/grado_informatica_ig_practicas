@@ -20,11 +20,14 @@ void draw_vertices(vector<float> &Vertices);
 class Figura{
     vector<vector<GLfloat> > vertex;
     vector<vector<GLint> > caras;
+    // Vector para guardar normales de caras (mismo tamaño del vector de vertices https://es.wikipedia.org/wiki/Producto_vectorial)
+    // Vector para guardar normales de vertices
     string tipo;
     unsigned int num_filas;
 
     vector<vector<GLfloat> > unitobi(vector<float> &v);
     vector<vector<GLint> > unitobi(vector<int> &c);
+    void generar_rotaciones(unsigned int);
 public:
     
     Figura(vector<float> &vertice, vector<int> &caras, string tipo);
