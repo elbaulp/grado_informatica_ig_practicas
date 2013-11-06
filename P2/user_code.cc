@@ -86,7 +86,7 @@ Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
 //***************************************************************************
 void Figura::draw_vertices()
 {
-    glColor3f(0,1,0);
+    glColor3f(1,.4,.2);
     glPointSize(4);
     
     glBegin(GL_POINTS);
@@ -100,7 +100,7 @@ void Figura::draw_vertices()
  * Dibujar con triángulos
  */
 void Figura::draw_triangles(){
-    glColor3f(0,0,1);
+    glColor3f(.4, 1, 1);
     glPointSize(2);
 
     bool ajedrez = false;
@@ -121,8 +121,8 @@ void Figura::draw_triangles(){
 
     for (int i = 0; i < this->caras.size() - 1; i++){
         if (ajedrez){
-            if (i%3==0) glColor3f(0,1,0);   
-            else if (i%3==1) glColor3f(0,0,1);
+            if (i%3==0) glColor3f(1,.4,.2);   
+            else if (i%3==1) glColor3f(1,.84,0);
         }
         glVertex3fv((GLfloat*) vertex[caras[i][2]].data());
         glVertex3fv((GLfloat*) vertex[caras[i][1]].data());
