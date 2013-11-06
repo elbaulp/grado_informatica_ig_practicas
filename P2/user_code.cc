@@ -43,11 +43,31 @@ Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
     this->tipo.assign(tipo);
     this->rotaciones = rotacion;
 
-    generar_rotaciones(rotacion);
+    generarRotaciones(rotacion);
 }
 
-void Figura::generar_rotaciones(unsigned int rot){
-    for (int i=0; i < this->num_filas * rot ; i++){
+vector<GLfloat> Figura::productoCartesiano(vector<GLfloat> &v1, vector<GLfloat> &v2) {
+    vector<GLfloat> vR(3);
+    
+    vR.at(0) =   ( (v1[1] * v2[2]) - (v1[2] * v2[1]) );
+    vR.at(1) = - ( (v1[0] * v2[2]) - (v1[2] * v2[0]) );
+    vR.at(2) =   ( (v1[0] * v2[1]) - (v1[1] * v2[0]) );
+}
+
+void Figura::normalizar(vector<GLfloat> &v) {
+    GLfloat fMag;
+
+    fMag = sqrt(pow(v[0], 2) +
+                pow(v[1], 2) +
+                pow(v[2], 2)
+            );
+    v.at(0) = v.at(0) / fMag;
+    v.at(1) = v.at(1) / fMag;
+    v.at(2) = v.at(2) / fMag;
+}
+
+void Figura::generarRotaciones(unsigned int rot){
+    for (uint i=0; i < this->num_filas * rot ; i++){
         GLfloat x = vertex[i].data()[0] * cos((2.0/rot) * M_PI)
             + vertex[i].data()[2] * sin((2.0/rot) * M_PI);
         GLfloat y = vertex[i].data()[1];

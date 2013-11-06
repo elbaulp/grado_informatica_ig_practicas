@@ -28,7 +28,9 @@ class Figura{
 
     vector<vector<GLfloat> > unitobi(vector<float> &v);
     vector<vector<GLint> > unitobi(vector<int> &c);
-    void generar_rotaciones(unsigned int);
+    vector<GLfloat> productoCartesiano(vector<GLfloat> &v1, vector<GLfloat> &v2);
+    void normalizar(vector<GLfloat> &v1);
+    void generarRotaciones(unsigned int);
 public:
     
     Figura(vector<float> &vertice, vector<int> &caras, string tipo);
