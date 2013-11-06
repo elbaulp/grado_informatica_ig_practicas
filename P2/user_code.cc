@@ -41,12 +41,12 @@ Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
     this->vertex = this->unitobi(vertice);
     this->caras = std::vector<vector<GLint> >();
     this->tipo.assign(tipo);
-    
+    this->rotaciones = rotacion;
+
     generar_rotaciones(rotacion);
 }
 
 void Figura::generar_rotaciones(unsigned int rot){
-
     for (int i=0; i < this->num_filas * rot ; i++){
         GLfloat x = vertex[i].data()[0] * cos((2.0/rot) * M_PI)
             + vertex[i].data()[2] * sin((2.0/rot) * M_PI);

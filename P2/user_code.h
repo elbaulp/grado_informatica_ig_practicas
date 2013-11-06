@@ -24,6 +24,7 @@ class Figura{
     // Vector para guardar normales de vertices
     string tipo;
     unsigned int num_filas;
+    unsigned int rotaciones;
 
     vector<vector<GLfloat> > unitobi(vector<float> &v);
     vector<vector<GLint> > unitobi(vector<int> &c);
