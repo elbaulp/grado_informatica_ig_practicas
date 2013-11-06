@@ -20,7 +20,7 @@ void draw_vertices(vector<float> &Vertices);
 class Figura{
     vector<vector<GLfloat> > vertex;
     vector<vector<GLint> > caras;
-    // Vector para guardar normales de caras (mismo tamaño del vector de vertices https://es.wikipedia.org/wiki/Producto_vectorial)
+    vector<vector<GLfloat> > normalesCaras;
     // Vector para guardar normales de vertices
     string tipo;
     unsigned int num_filas;

@@ -40,6 +40,7 @@ Figura::Figura(vector<GLfloat> &vertice, vector<GLint> &caras, string tipo){
 Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
     this->vertex = this->unitobi(vertice);
     this->caras = std::vector<vector<GLint> >();
+    this->normalesCaras = vector<vector<GLfloat> >();
     this->tipo.assign(tipo);
     this->rotaciones = rotacion;
 
@@ -57,15 +58,15 @@ vector<GLfloat> Figura::productoCartesiano(vector<GLfloat> &v1, vector<GLfloat> 
 }
 
 void Figura::normalizar(vector<GLfloat> &v) {
-    GLfloat fMag;
+    GLfloat modulo;
 
-    fMag = sqrt(pow(v[0], 2) +
-                pow(v[1], 2) +
+    modulo = sqrt(pow(v[0], 2)  +
+                pow(v[1], 2)    +
                 pow(v[2], 2)
             );
-    v.at(0) = v.at(0) / fMag;
-    v.at(1) = v.at(1) / fMag;
-    v.at(2) = v.at(2) / fMag;
+    v.at(0) = v.at(0) / modulo;
+    v.at(1) = v.at(1) / modulo;
+    v.at(2) = v.at(2) / modulo;
 }
 
 void Figura::generarRotaciones(unsigned int rot){
@@ -80,6 +81,11 @@ void Figura::generarRotaciones(unsigned int rot){
         v.push_back(x);
         v.push_back(y);
         v.push_back(z);
+
+        /* Calcular la normal de las caras */
+        vector<GLfloat> normal = productoCartesiano(v, this->vertex.at(this->vertex.size() - 1));
+        normalizar(normal);
+        this->normalesCaras.push_back(normal);
         this->vertex.push_back(v);
 
         /* Constrir el vector de caras */
