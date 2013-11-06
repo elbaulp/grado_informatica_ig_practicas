@@ -49,9 +49,11 @@ Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
 vector<GLfloat> Figura::productoCartesiano(vector<GLfloat> &v1, vector<GLfloat> &v2) {
     vector<GLfloat> vR(3);
     
-    vR.at(0) =   ( (v1[1] * v2[2]) - (v1[2] * v2[1]) );
-    vR.at(1) = - ( (v1[0] * v2[2]) - (v1[2] * v2[0]) );
-    vR.at(2) =   ( (v1[0] * v2[1]) - (v1[1] * v2[0]) );
+    vR.at(0) =   ( (v1.at(1) * v2.at(2)) - (v1.at(2) * v2.at(1)) );
+    vR.at(1) = - ( (v1.at(0) * v2.at(2)) - (v1.at(2) * v2.at(0)) );
+    vR.at(2) =   ( (v1.at(0) * v2.at(1)) - (v1.at(1) * v2.at(0)) );
+
+    return vR;
 }
 
 void Figura::normalizar(vector<GLfloat> &v) {
