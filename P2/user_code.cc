@@ -43,11 +43,11 @@ Figura::Figura(vector<float> &vertice, string tipo, unsigned int rotacion){
     this->tipo.assign(tipo);
 
     for (int i=0; i < this->num_filas * rotacion ; i++){
-        GLfloat x = vertex[i].data()[0] * cos(((360/rotacion) * M_PI)/180)
-            + vertex[i].data()[2] * sin(((360/rotacion) * M_PI)/180);
+        GLfloat x = vertex[i].data()[0] * cos((2.0/rotacion) * M_PI)
+            + vertex[i].data()[2] * sin((2.0/rotacion) * M_PI);
         GLfloat y = vertex[i].data()[1];
-        GLfloat z = -sin(((360/rotacion)*M_PI)/180) * vertex[i].data()[0] 
-            + vertex[i].data()[2] * cos(((360/rotacion)*M_PI)/180);
+        GLfloat z = -sin((2.0/rotacion)*M_PI) * vertex[i].data()[0] 
+            + vertex[i].data()[2] * cos((2.0/rotacion)*M_PI);
     
         vector<GLfloat> v;
         v.push_back(x);
@@ -115,7 +115,7 @@ void Figura::draw_triangles(){
     }
     else glPolygonMode(GL_FRONT, GL_FILL);
     
-    //glPolygonMode(GL_BACK, GL_LINE);
+    glPolygonMode(GL_BACK, GL_LINE);
     
     glBegin(GL_TRIANGLES);
 
