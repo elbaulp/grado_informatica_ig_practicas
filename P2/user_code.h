@@ -21,6 +21,7 @@ class Figura{
     vector<vector<GLfloat> > vertex;
     vector<vector<GLint> > caras;
     vector<vector<GLfloat> > normalesCaras;
+    
     // Vector para guardar normales de vertices
     string tipo;
     unsigned int num_filas;
@@ -31,6 +32,7 @@ class Figura{
     vector<GLfloat> productoCartesiano(vector<GLfloat> &v1, vector<GLfloat> &v2);
     void normalizar(vector<GLfloat> &v1);
     void generarRotaciones(unsigned int);
+    void calcularNormalesCaras();
 public:
     
     Figura(vector<float> &vertice, vector<int> &caras, string tipo);
