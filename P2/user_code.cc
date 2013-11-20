@@ -118,16 +118,6 @@ void Figura::generarRotaciones(unsigned int rot){
  * Calcular las normales de las caras
  */
 void Figura::calcularNormalesCaras(){
-/*
- * For a face, take vertices {0, 1, 2}. I don't know the Vec3f specification (or if it's a class or C struct), but we can find the normal for all vertices in the quad with:
- *
- * Vec3f va = v0 - v1; // quad vertex 1 -> 0
- * Vec3f vb = v2 - v1; // quad vertex 1 -> 2
- * Vec3f norm = cross(vb, va); // cross product.
- *
- * float norm_len = sqrt(dot(norm, norm));
- * norm /= norm_len; // divide each component of norm by norm_len.
- */
     for (unsigned int i = 0; i < this->caras.size() ; i++){
         vector<GLfloat> v0 = vertex[caras[i][0]];
         vector<GLfloat> v1 = vertex[caras[i][1]];
@@ -135,18 +125,24 @@ void Figura::calcularNormalesCaras(){
         
         vector<GLfloat> va;
         vector<GLfloat> vb;
+        
+        va.push_back(v1[0] - v0[0]);
+        va.push_back(v1[1] - v1[1]);
+        va.push_back(v1[2] - v2[2]);
+        
+        vb.push_back(v2[0] - v1[0]);
+        vb.push_back(v2[1] - v1[1]);
+        vb.push_back(v2[2] - v1[2]);
 
-        std::transform(v1.begin(),v1.end(),v0.begin(),v1.begin(),std::minus<GLfloat>());
-        std::transform(v2.begin(),v2.end(),v1.begin(),v2.begin(),std::minus<GLfloat>());
-        va = v0;
-        vb = v2;
         vector<GLfloat> prod = productoCartesiano(vb,va);
-        // Asegurarme que no sean cero antes de normalizar
-        normalizar(prod);
+        
+        if ( prod[0] != 0 || prod[1] != 0 || prod[2] != 0)
+            normalizar(prod);
+        
         this->normalesCaras.push_back(prod);
     }
     cout << "imprimiendo normales de caras" << endl;
-    for (int i = 0 ; i < normalesCaras.size() ; i++)
+    for (uint i = 0 ; i < normalesCaras.size() ; i++)
         cout << normalesCaras[i][0] << " " << normalesCaras[i][1] << " " << normalesCaras[i][2] << endl;
 }
 //**************************************************************************
