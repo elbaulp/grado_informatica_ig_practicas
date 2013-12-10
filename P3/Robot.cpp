@@ -13,27 +13,53 @@ Robot::Robot() {
   this->center[0] = 0;
   this->center[1] = 0;
   this->center[2] = 0;
-  for (int i = 0; i < QUIT; i++) {
+  for (int i = 0; i < QUIT; i++)
     this->theta[i] = 0;
-    this->direccion[i] = 1;
-  }
-  HEAD_HEIGHT = 3.0;
-  HEAD_RADIUS = 1.0;
 
-  TORSO_HEIGHT = 5.0;
-  TORSO_RADIUS = 1.0;
+  head_height = 3.0;
+  head_radius = 1.0;
 
-  UPPER_ARM_HEIGHT = 3.0;
-  LOWER_ARM_HEIGHT = 2.0;
-  UPPER_ARM_RADIUS = 0.5;
-  LOWER_ARM_RADIUS = 0.5;
+  torso_height = 5.0;
+  torso_radius = 1.0;
 
-  UPPER_LEG_HEIGHT = 3.0;
-  LOWER_LEG_HEIGHT = 2.0;
-  UPPER_LEG_RADIUS = 0.5;
-  LOWER_LEG_RADIUS = 0.5;
+  upper_arm_height = 3.0;
+  lower_arm_height = 2.0;
+  upper_arm_radius = 0.5;
+  lower_arm_radius = 0.5;
+
+  upper_leg_height = 3.0;
+  lower_leg_height = 2.0;
+  upper_leg_radius = 0.5;
+  lower_leg_radius = 0.5;
 }
 
+Robot::Robot(GLfloat lowerArmHeight, GLfloat lowerArmRadius,
+             GLfloat lowerLegHeight, GLfloat lowerLegRadius,
+             GLfloat torsoHeight, GLfloat torsoRadius, GLfloat upperArmHeight,
+             GLfloat upperArmRadius, GLfloat upperLegHeight,
+             GLfloat upperLegRadius) {
+  genDirec();
+  InitQuadrics();
+  this->dance = false;
+  this->center[0] = 0;
+  this->center[1] = 0;
+  this->center[2] = 0;
+  for (int i = 0; i < QUIT; i++)
+    this->theta[i] = 0;
+
+  setHeadHeight(3.0);
+  setHeadRadius(1.0);
+  setLowerArmHeight(lowerArmHeight);
+  setLowerArmRadius(lowerArmRadius);
+  setLowerLegHeight(lowerLegHeight);
+  setLowerLegRadius(lowerLegRadius);
+  setTorsoHeight(torsoHeight);
+  setTorsoRadius(torsoRadius);
+  setUpperArmHeight(upperArmHeight);
+  setUpperArmRadius(upperArmRadius);
+  setUpperLegHeight(upperLegHeight);
+  setUpperLegRadius(upperLegRadius);
+}
 /* Allocate quadrics with filled drawing style */
 void Robot::InitQuadrics() {
   t = gluNewQuadric();
@@ -58,7 +84,7 @@ void Robot::InitQuadrics() {
 
 void Robot::Robot::head() {
   glPushMatrix();
-  glScalef(HEAD_RADIUS, HEAD_HEIGHT / 2, HEAD_RADIUS);
+  glScalef(head_radius, head_height / 2, head_radius);
   gluSphere(h, 1.0, 10, 10);
   glPopMatrix();
 }
@@ -66,14 +92,14 @@ void Robot::Robot::head() {
 void Robot::torso() {
   glPushMatrix();
   glRotatef(90.0, 1.0, 0.0, 0.0);
-  gluCylinder(t, TORSO_RADIUS, TORSO_RADIUS, TORSO_HEIGHT, 10, 10);
+  gluCylinder(t, torso_radius, torso_radius, torso_height, 10, 10);
   glPopMatrix();
 }
 
 void Robot::left_upper_arm() {
   glPushMatrix();
   glRotatef(90, 0, 1, 0);
-  gluCylinder(lua, UPPER_ARM_RADIUS, UPPER_ARM_RADIUS, UPPER_ARM_HEIGHT, 10,
+  gluCylinder(lua, upper_arm_radius, upper_arm_radius, upper_arm_height, 10,
               10);
   glPopMatrix();
 }
@@ -81,7 +107,7 @@ void Robot::left_upper_arm() {
 void Robot::left_lower_arm() {
   glPushMatrix();
   glRotatef(90, 0, 1, 0);
-  gluCylinder(lla, LOWER_ARM_RADIUS, LOWER_ARM_RADIUS, LOWER_ARM_HEIGHT, 10,
+  gluCylinder(lla, lower_arm_radius, lower_arm_radius, lower_arm_height, 10,
               10);
   glPopMatrix();
 }
@@ -89,7 +115,7 @@ void Robot::left_lower_arm() {
 void Robot::right_upper_arm() {
   glPushMatrix();
   glRotatef(-90, 0, 1, 0);
-  gluCylinder(rua, UPPER_ARM_RADIUS, UPPER_ARM_RADIUS, UPPER_ARM_HEIGHT, 10,
+  gluCylinder(rua, upper_arm_radius, upper_arm_radius, upper_arm_height, 10,
               10);
   glPopMatrix();
 }
@@ -97,7 +123,7 @@ void Robot::right_upper_arm() {
 void Robot::right_lower_arm() {
   glPushMatrix();
   glRotatef(-90, 0, 1, 0);
-  gluCylinder(lla, LOWER_ARM_RADIUS, LOWER_ARM_RADIUS, LOWER_ARM_HEIGHT, 10,
+  gluCylinder(lla, lower_arm_radius, lower_arm_radius, lower_arm_height, 10,
               10);
   glPopMatrix();
 }
@@ -105,7 +131,7 @@ void Robot::right_lower_arm() {
 void Robot::left_upper_leg() {
   glPushMatrix();
   glRotatef(90, 1, 0, 0);
-  gluCylinder(lul, UPPER_LEG_RADIUS, UPPER_LEG_RADIUS, UPPER_LEG_HEIGHT, 10,
+  gluCylinder(lul, upper_leg_radius, upper_leg_radius, upper_leg_height, 10,
               10);
   glPopMatrix();
 }
@@ -113,7 +139,7 @@ void Robot::left_upper_leg() {
 void Robot::left_lower_leg() {
   glPushMatrix();
   glRotatef(90, 1, 0, 0);
-  gluCylinder(lll, LOWER_LEG_RADIUS, LOWER_LEG_RADIUS, LOWER_LEG_HEIGHT, 10,
+  gluCylinder(lll, lower_leg_radius, lower_leg_radius, lower_leg_height, 10,
               10);
   glPopMatrix();
 }
@@ -121,7 +147,7 @@ void Robot::left_lower_leg() {
 void Robot::right_upper_leg() {
   glPushMatrix();
   glRotatef(90, 1, 0, 0);
-  gluCylinder(rul, UPPER_LEG_RADIUS, UPPER_LEG_RADIUS, UPPER_LEG_HEIGHT, 10,
+  gluCylinder(rul, upper_leg_radius, upper_leg_radius, upper_leg_height, 10,
               10);
   glPopMatrix();
 }
@@ -129,7 +155,7 @@ void Robot::right_upper_leg() {
 void Robot::right_lower_leg() {
   glPushMatrix();
   glRotatef(90, 1, 0, 0);
-  gluCylinder(rll, LOWER_LEG_RADIUS, LOWER_LEG_RADIUS, LOWER_LEG_HEIGHT, 10,
+  gluCylinder(rll, lower_leg_radius, lower_leg_radius, lower_leg_height, 10,
               10);
   glPopMatrix();
 }
@@ -139,79 +165,43 @@ void Robot::DrawRobot(float x, float y, float z, float lua, float lla,
                       float rll) {
   torso();
   glPushMatrix();
-  glTranslatef(0, HEAD_HEIGHT / 2, 0);
-  head();
+    glTranslatef(0, head_height / 2, 0);
+    head();
   glPopMatrix();
   glPushMatrix();
-  glTranslatef(TORSO_RADIUS, 0, 0);
-  glRotatef(lua, 0, 0, 1);
-  left_upper_arm();
-  glTranslatef(UPPER_ARM_HEIGHT, 0, 0);
-  glRotatef(lla, 0, 0, 1);
-  left_lower_arm();
+    glTranslatef(torso_radius, 0, 0);
+    glRotatef(lua, 0, 0, 1);
+    left_upper_arm();
+    glTranslatef(upper_arm_height, 0, 0);
+    glRotatef(lla, 0, 0, 1);
+    left_lower_arm();
   glPopMatrix();
   glPushMatrix();
-  glTranslatef(-TORSO_RADIUS, 0, 0);
-  glRotatef(rua, 0, 0, 1);
-  right_upper_arm();
-  glTranslatef(-UPPER_ARM_HEIGHT, 0, 0);
-  glRotatef(rla, 0, 0, 1);
-  right_lower_arm();
+    glTranslatef(-torso_radius, 0, 0);
+    glRotatef(rua, 0, 0, 1);
+    right_upper_arm();
+    glTranslatef(-upper_arm_height, 0, 0);
+    glRotatef(rla, 0, 0, 1);
+    right_lower_arm();
   glPopMatrix();
   glPushMatrix();
-  glTranslatef(TORSO_RADIUS, -TORSO_HEIGHT, 0);
-  glRotatef(lul, 1, 0, 0);
-  left_upper_leg();
-  glTranslatef(0, -UPPER_LEG_HEIGHT, 0);
-  glRotatef(lll, 1, 0, 0);
-  left_lower_leg();
+    glTranslatef(torso_radius, -torso_height, 0);
+    glRotatef(lul, 1, 0, 0);
+    left_upper_leg();
+    glTranslatef(0, -upper_leg_height, 0);
+    glRotatef(lll, 1, 0, 0);
+    left_lower_leg();
   glPopMatrix();
   glPushMatrix();
-  glTranslatef(-TORSO_RADIUS, -TORSO_HEIGHT, 0);
-  glRotatef(rul, 1, 0, 0);
-  right_upper_leg();
-  glTranslatef(0, -UPPER_LEG_HEIGHT, 0);
-  glRotatef(rll, 1, 0, 0);
-  right_lower_leg();
+    glTranslatef(-torso_radius, -torso_height, 0);
+    glRotatef(rul, 1, 0, 0);
+    right_upper_leg();
+    glTranslatef(0, -upper_leg_height, 0);
+    glRotatef(rll, 1, 0, 0);
+    right_lower_leg();
   glPopMatrix();
 }
 
-/*
- * An idle event is generated when no other event occurs.
- * Robot dances during idle times.
- */
-/*
-void Robot::Idle(int d) {
-  if (d) {
-    theta[LUA] += 3 * direccion[LUA];
-    theta[LLA] += 3 * direccion[LLA];
-    theta[RUA] += 3 * direccion[RUA];
-    theta[RLA] += 3 * direccion[RLA];
-    theta[LUL] += 3 * direccion[LUL];
-    theta[LLL] += 3 * direccion[LLL];
-    theta[RUL] += 3 * direccion[RUL];
-    theta[RLL] += 3 * direccion[RLL];
-    if (theta[LUA] > 60 || theta[LUA] < -60)
-      direccion[LUA] *= -1;
-    if (theta[LLA] > 30 || theta[LLA] < -30)
-      direccion[LLA] *= -1;
-    if (theta[RUA] > 60 || theta[RUA] < -60)
-      direccion[RUA] *= -1;
-    if (theta[RLA] > 30 || theta[RLA] < -30)
-      direccion[RLA] *= -1;
-    if (theta[LUL] > 90 || theta[LUL] < -90)
-      direccion[LUL] *= -1;
-    if (theta[LLL] > 45 || theta[LLL] < -45)
-      direccion[LLL] *= -1;
-    if (theta[RUL] > 90 || theta[RUL] < -90)
-      direccion[RUL] *= -1;
-    if (theta[RLL] > 45 || theta[RLL] < -45)
-      direccion[RLL] *= -1;
-    glutPostRedisplay();
-  }
-  glutTimerFunc(10, this->Idle, dance);
-}
-*/
 void Robot::move_lua_up() {
   theta[LUA] += 5;
 }
@@ -292,52 +282,36 @@ void Robot::genDirec() {
   }
 }
 
-//static GLint Robot::getAngle() const {
-//  return angle;/
-//}
-
-//void Robot::setAngle(static GLint angle = 0) {
-//  this->angle = angle;//
-//}///
-/*
- static const GLfloat* Robot::getCenter() const {
- return center;
- }
- */
 bool Robot::isDance() const {
   return dance;
 }
-/*
- void Robot::setDance(bool dance = false) {
- this->dance = dance;
- }
- */
-short int* Robot::getDireccion(){
+
+short int* Robot::getDireccion() {
   return direccion;
 }
 
 const GLfloat Robot::getHeadHeight() const {
-  return HEAD_HEIGHT;
+  return head_height;
 }
 
 const GLfloat Robot::getHeadRadius() const {
-  return HEAD_RADIUS;
+  return head_radius;
 }
 
 const GLfloat Robot::getLowerArmHeight() const {
-  return LOWER_ARM_HEIGHT;
+  return lower_arm_height;
 }
 
 const GLfloat Robot::getLowerArmRadius() const {
-  return LOWER_ARM_RADIUS;
+  return lower_arm_radius;
 }
 
 const GLfloat Robot::getLowerLegHeight() const {
-  return LOWER_LEG_HEIGHT;
+  return lower_leg_height;
 }
 
 const GLfloat Robot::getLowerLegRadius() const {
-  return LOWER_LEG_RADIUS;
+  return lower_leg_radius;
 }
 
 GLUquadricObj* Robot::getT() const {
@@ -353,27 +327,27 @@ GLfloat* Robot::getTheta() {
 }
 
 const GLfloat Robot::getTorsoHeight() const {
-  return TORSO_HEIGHT;
+  return torso_height;
 }
 
 const GLfloat Robot::getTorsoRadius() const {
-  return TORSO_RADIUS;
+  return torso_radius;
 }
 
 const GLfloat Robot::getUpperArmHeight() const {
-  return UPPER_ARM_HEIGHT;
+  return upper_arm_height;
 }
 
 const GLfloat Robot::getUpperArmRadius() const {
-  return UPPER_ARM_RADIUS;
+  return upper_arm_radius;
 }
 
 const GLfloat Robot::getUpperLegHeight() const {
-  return UPPER_LEG_HEIGHT;
+  return upper_leg_height;
 }
 
 const GLfloat Robot::getUpperLegRadius() const {
-  return UPPER_LEG_RADIUS;
+  return upper_leg_radius;
 }
 
 const bool Robot::getDance() const {
@@ -382,4 +356,52 @@ const bool Robot::getDance() const {
 
 void Robot::toggleDance() {
   this->dance = !this->dance;
+}
+
+void Robot::setHeadHeight(GLfloat headHeight) {
+  head_height = headHeight;
+}
+
+void Robot::setHeadRadius(GLfloat headRadius) {
+  head_radius = headRadius;
+}
+
+void Robot::setLowerArmHeight(GLfloat lowerArmHeight) {
+  lower_arm_height = lowerArmHeight;
+}
+
+void Robot::setLowerArmRadius(GLfloat lowerArmRadius) {
+  lower_arm_radius = lowerArmRadius;
+}
+
+void Robot::setLowerLegHeight(GLfloat lowerLegHeight) {
+  lower_leg_height = lowerLegHeight;
+}
+
+void Robot::setLowerLegRadius(GLfloat lowerLegRadius) {
+  lower_leg_radius = lowerLegRadius;
+}
+
+void Robot::setTorsoHeight(GLfloat torsoHeight) {
+  torso_height = torsoHeight;
+}
+
+void Robot::setTorsoRadius(GLfloat torsoRadius) {
+  torso_radius = torsoRadius;
+}
+
+void Robot::setUpperArmHeight(GLfloat upperArmHeight) {
+  upper_arm_height = upperArmHeight;
+}
+
+void Robot::setUpperArmRadius(GLfloat upperArmRadius) {
+  upper_arm_radius = upperArmRadius;
+}
+
+void Robot::setUpperLegHeight(GLfloat upperLegHeight) {
+  upper_leg_height = upperLegHeight;
+}
+
+void Robot::setUpperLegRadius(GLfloat upperLegRadius) {
+  upper_leg_radius = upperLegRadius;
 }

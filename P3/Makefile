@@ -2,7 +2,7 @@
 #
 # nombre del fichero ejecutable
 #
-TARGETS= practica3 practica3OO
+TARGETS= practica3OO
 
 # banderas para el compilador (C y C++). Se indican los directorios donde se puenden
 # encontrar ficheros para incluir mediante la opcion -I
@@ -30,8 +30,8 @@ default : $(TARGETS)
 practica3 : robotSkeleton.o
 	$(CC) -o $@ $(CXXFLAGS) robotSkeleton.o $(LDFLAGS)
 
-practica3OO : robotSkeleton.o Robot.o
-	$(CC) -o $@ $(CXXFLAGS) robotSkeleton.o Robot.o $(LDFLAGS)
+practica3OO : OOrobotSkeleton.o Robot.o
+	$(CC) -o $@ $(CXXFLAGS) OOrobotSkeleton.o Robot.o $(LDFLAGS)
 	
 Robot.o: Robot.cpp
 	@echo Creando $@... con $^

@@ -14,11 +14,11 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.922601765" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="P3" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.922601765" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.922601765.650485444" name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.base.70788137" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.1360532520" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-							<builder arguments="practica3 practica3OO" command="make" id="cdt.managedbuild.target.gnu.builder.base.375456291" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder arguments="practica3OO" autoBuildTarget="all" cleanBuildTarget="clean" command="make" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="cdt.managedbuild.target.gnu.builder.base.375456291" incrementalBuildTarget="practica3OO" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.2096668029" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.840435363" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.582078245" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -43,15 +43,6 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.396133060;cdt.managedbuild.toolchain.gnu.base.396133060.1300152267;cdt.managedbuild.tool.gnu.cpp.compiler.base.366883743;cdt.managedbuild.tool.gnu.cpp.compiler.input.749882446">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.396133060;cdt.managedbuild.toolchain.gnu.base.396133060.1300152267;cdt.managedbuild.tool.gnu.c.compiler.base.1523672577;cdt.managedbuild.tool.gnu.c.compiler.input.2004965190">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="P3.null.662052613" name="P3"/>
 	</storageModule>
@@ -60,5 +51,20 @@
 		<configuration configurationName="Default">
 			<resource resourceType="PROJECT" workspacePath="/P3"/>
 		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.922601765;cdt.managedbuild.toolchain.gnu.base.922601765.650485444;cdt.managedbuild.tool.gnu.c.compiler.base.2000122616;cdt.managedbuild.tool.gnu.c.compiler.input.1752088975">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.396133060;cdt.managedbuild.toolchain.gnu.base.396133060.1300152267;cdt.managedbuild.tool.gnu.cpp.compiler.base.366883743;cdt.managedbuild.tool.gnu.cpp.compiler.input.749882446">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.922601765;cdt.managedbuild.toolchain.gnu.base.922601765.650485444;cdt.managedbuild.tool.gnu.cpp.compiler.base.840435363;cdt.managedbuild.tool.gnu.cpp.compiler.input.582078245">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.396133060;cdt.managedbuild.toolchain.gnu.base.396133060.1300152267;cdt.managedbuild.tool.gnu.c.compiler.base.1523672577;cdt.managedbuild.tool.gnu.c.compiler.input.2004965190">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>

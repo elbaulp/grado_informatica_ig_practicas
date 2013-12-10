@@ -10,13 +10,6 @@
  * keys; and zoom in and out using the keys Home and End.
  */
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-//  #include <windows.h>
-#include <GL/glut.h>
-#endif
-
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
@@ -34,6 +27,7 @@ using namespace std;
 
 const int AXIS_SIZE = 5000;
 
+//Robot myRobot(1,2,1,2,1,2,1,2,1,2);
 Robot myRobot;
 
 /* Structure to define the state of the mouse */

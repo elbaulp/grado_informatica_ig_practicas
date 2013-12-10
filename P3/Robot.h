@@ -20,6 +20,10 @@ class Robot {
  public:
 
   Robot();
+  Robot(GLfloat lowerArmHeight, GLfloat lowerArmRadius, GLfloat lowerLegHeight,
+        GLfloat lowerLegRadius, GLfloat torsoHeight, GLfloat torsoRadius,
+        GLfloat upperArmHeight, GLfloat upperArmRadius, GLfloat upperLegHeight,
+        GLfloat upperLegRadius);
 
   /* Enumeration of body parts */
   enum {
@@ -52,6 +56,7 @@ class Robot {
   void move_rul_down();
   void move_rll_up();
   void move_rll_down();
+
   /* Allocate quadrics with filled drawing style */
   void InitQuadrics();
 
@@ -67,17 +72,14 @@ class Robot {
   void right_lower_leg();
 
   void toggleDance();
-  void static static_Idle(int d);
-  void Idle(int d);
+
   void DrawRobot(float x, float y, float z, float lua, float lla, float rua,
                  float rla, float lul, float lll, float rul, float rll);
+  void Idle(int d);
+  void genDirec();
+  double randRange(double min, double max);
 
-  //static GLint getAngle() const;
-  //void setAngle(static GLint angle = 0);
   const GLfloat* getCenter() const;
-  bool isDance() const;
-  void setDance(bool dance = false);
-  void setTheta(int);
   short int* getDireccion();
   const GLfloat getHeadHeight() const;
   const GLfloat getHeadRadius() const;
@@ -96,24 +98,40 @@ class Robot {
   const GLfloat getUpperLegHeight() const;
   const GLfloat getUpperLegRadius() const;
 
+  bool isDance() const;
+  void setDance(bool dance = false);
+  void setTheta(int);
+  void setHeadHeight(GLfloat headHeight);
+  void setHeadRadius(GLfloat headRadius);
+  void setLowerArmHeight(GLfloat lowerArmHeight);
+  void setLowerArmRadius(GLfloat lowerArmRadius);
+  void setLowerLegHeight(GLfloat lowerLegHeight);
+  void setLowerLegRadius(GLfloat lowerLegRadius);
+  void setTorsoHeight(GLfloat torsoHeight);
+  void setTorsoRadius(GLfloat torsoRadius);
+  void setUpperArmHeight(GLfloat upperArmHeight);
+  void setUpperArmRadius(GLfloat upperArmRadius);
+  void setUpperLegHeight(GLfloat upperLegHeight);
+  void setUpperLegRadius(GLfloat upperLegRadius);
+
  private:
 
   /* Variables to control the size of the robot */
-  GLfloat HEAD_HEIGHT;
-  GLfloat HEAD_RADIUS;
+  GLfloat head_height;
+  GLfloat head_radius;
 
-  GLfloat TORSO_HEIGHT;
-  GLfloat TORSO_RADIUS;
+  GLfloat torso_height;
+  GLfloat torso_radius;
 
-  GLfloat UPPER_ARM_HEIGHT;
-  GLfloat LOWER_ARM_HEIGHT;
-  GLfloat UPPER_ARM_RADIUS;
-  GLfloat LOWER_ARM_RADIUS;
+  GLfloat upper_arm_height;
+  GLfloat lower_arm_height;
+  GLfloat upper_arm_radius;
+  GLfloat lower_arm_radius;
 
-  GLfloat UPPER_LEG_HEIGHT;
-  GLfloat LOWER_LEG_HEIGHT;
-  GLfloat UPPER_LEG_RADIUS;
-  GLfloat LOWER_LEG_RADIUS;
+  GLfloat upper_leg_height;
+  GLfloat lower_leg_height;
+  GLfloat upper_leg_radius;
+  GLfloat lower_leg_radius;
 
   GLUquadricObj *t, *h, /* torso and head */
   *lua, *lla, *rua, *rla, /* arms */
@@ -139,8 +157,6 @@ class Robot {
   /* Dance mode or not? */
   bool dance;
 
-  void genDirec();
-  double randRange(double min, double max);
 };
 
 #endif /* ROBOT_H_ */
