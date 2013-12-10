@@ -2,11 +2,11 @@
 #
 # nombre del fichero ejecutable
 #
-TARGETS= practica3
+TARGETS= practica3 practica3OO
 
 # banderas para el compilador (C y C++). Se indican los directorios donde se puenden
 # encontrar ficheros para incluir mediante la opcion -I
-# la opcion -g sirve para permitir la depuración
+# la opcion -g sirve para permitir la depuraciï¿½n
 #
 CFLAGS=    -g -DXWINDOWS -DSHM -I/usr/include -I.
 CXXFLAGS=  -g -DXWINDOWS -DSHM -I/usr/include -I.
@@ -27,9 +27,15 @@ default : $(TARGETS)
 
 # regla de ejecucion
 #
-$(TARGETS) : robotSkeleton.o
+practica3 : robotSkeleton.o
 	$(CC) -o $@ $(CXXFLAGS) robotSkeleton.o $(LDFLAGS)
 
+practica3OO : robotSkeleton.o Robot.o
+	$(CC) -o $@ $(CXXFLAGS) robotSkeleton.o Robot.o $(LDFLAGS)
+	
+Robot.o: Robot.cpp
+	@echo Creando $@... con $^
+	$(CC) $(CXXFLAGS) -Wall -g -ansi -I. -c Robot.cpp -o Robot.o $(LDFLAGS)
 #
 #
 clean:
